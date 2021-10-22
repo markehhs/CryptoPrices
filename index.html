@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <style>
+            #displayPrice {
+            text-align: center;
+            border: 3px solid green;
+            margin: auto;
+            margin-top: 10%;
+        }
+        </style>
+    </head>
+    <body>
+        <!-- make a button
+        1. Pretty it up
+        2. Center maybe
+        3. Make the coin and price larger
+        -->
+        
+
+        
+        
+        
+        <div id="displayPrice">
+        <p id="coinPrice">  </p> <p id="coinCurrency">  </p>
+        <form action="javascript:formClick()" id="currForm" name="currForm" method="GET">
+            CURRENCY<input type="text" id="currency" name="currency" label='CURRENCY' value="USD"> 
+            COIN    <input type="text" id="coin" name="coin" label="COIN" value="BTC">
+                    <input type="submit" id="submit">
+        </form>
+        </div>
+
+        
+
+        <script>
+            //lets make a default value...
+            var currency = "USD"
+            var coin = "BTC"
+            formClick()
+
+            function httpGet(theUrl)
+            {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+                xmlHttp.send( null );
+                return xmlHttp.responseText;
+            }
+            
+            function formClick() {
+                //alert("Clicked")
+                currency = document.getElementById("currency").value;
+                coin = document.getElementById("coin").value;
+                //now lets call the function
+                const respText = JSON.parse(httpGet('http://localhost:3000/price?currency=' + currency + '&coin=' + coin))
+                if (respText.error) {
+                    //error
+                    alert(respText)
+                } else {
+                    //good
+                    //alert(respText)
+                    const s = respText
+                    document.getElementById("coinPrice").innerHTML = s[0]
+                    document.getElementById("coinCurrency").innerHTML = s[1]
+                    //document.getElementById('displayPrice').style.display = 'block'
+
+                }
+                
+                //document.getElementById("coinPrice").innerHTML = "New text!";
+            }
+            
+        </script>
+        
+    </body>
+</html>
